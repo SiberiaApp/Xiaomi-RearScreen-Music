@@ -1,6 +1,8 @@
 # 小米背屏音乐助手
 > 适用于小米背屏系列的音乐播放器。
 
+*[English](README.md) | [简体中文](README_zh.md)*
+
 专为配备背屏/副屏的小米机型量身定制的动态音乐播放器小部件。深度结合 HyperOS/MIUI 的小部件特性，为您带来丝滑、原生的音乐控制体验。
 
 ### ✨ 核心功能
@@ -14,3 +16,13 @@
 
 ### 📄 开源协议
 本项目采用 [GPL-3.0 License](LICENSE) 开源协议。
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=SiberiaApp%2FXiaomi-RearScreen-Music&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=SiberiaApp/Xiaomi-RearScreen-Music&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=SiberiaApp/Xiaomi-RearScreen-Music&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=SiberiaApp/Xiaomi-RearScreen-Music&type=date&legend=top-left" />
+ </picture>
+</a>
