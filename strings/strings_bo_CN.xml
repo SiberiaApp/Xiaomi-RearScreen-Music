@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<resources>
+  <string name="RTL">0</string>
+  <string name="button_prev">གཞས་སྔོན་མ།</string>
+  <string name="button_next">གཞས་རྗེས་མ།</string>
+  <string name="button_pause">མཚམས་འཇོག</string>
+  <string name="button_play">གཏོང་བ།</string>
+  <string name="music_cover">音乐名称ཡི་མདུན་ཤོག</string>
+</resources>

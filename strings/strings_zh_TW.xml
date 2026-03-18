@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<resources>
+  <string name="RTL">0</string>
+  <string name="button_prev">上一首</string>
+  <string name="button_next">下一首</string>
+  <string name="button_pause">暫停</string>
+  <string name="button_play">播放</string>
+  <string name="music_cover">音乐名称的封面</string>
+</resources>

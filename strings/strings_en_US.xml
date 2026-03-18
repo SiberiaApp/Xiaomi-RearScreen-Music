@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<resources>
+  <string name="RTL">0</string>
+  <string name="button_prev">Previous song</string>
+  <string name="button_next">Next song</string>
+  <string name="button_pause">Pause</string>
+  <string name="button_play">Play</string>
+  <string name="music_cover">音乐名称 album art</string>
+</resources>

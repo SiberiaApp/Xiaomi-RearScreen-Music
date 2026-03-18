@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WidgetConfig version="1">
+
+
+    <SeekBar
+    name="platelet"
+    displayTitle="字体大小"
+    group="1"
+    from="48"
+    to="112"
+    default="75"
+    uiType="1">
+    
+    <Language displayTitle="ཡིག་ཨང་།" locale="bo_CN"/>
+    <Language displayTitle="Text size" locale="en_US"/>
+    <Language displayTitle="خەت نومۇرى" locale="ug_CN"/>
+    <Language displayTitle="字号" locale="zh_CN"/>
+    <Language displayTitle="字號" locale="zh_HK"/>
+    <Language displayTitle="字號" locale="zh_TW"/>
+    
+    </SeekBar>
+
+</WidgetConfig>

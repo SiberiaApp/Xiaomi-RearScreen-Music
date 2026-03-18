@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<resources>
+  <string name="RTL">1</string>
+  <string name="button_prev">ئالدىنقى</string>
+  <string name="button_next">كېيىنكى مۇزىكا</string>
+  <string name="button_pause">تورمۇزلاش</string>
+  <string name="button_play">قويۇش</string>
+  <string name="music_cover">音乐名称 نىڭ مۇقاۋىسى</string>
+</resources>

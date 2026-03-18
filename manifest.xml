@@ -1,0 +1,951 @@
+<Widget frameRate="60" scaleByDensity="false" screenWidth="1080" version="2" useVariableUpdater="HyperMaterial,DateTime.Minute">
+  <Var name="__debug" type="number" expression="0"/>
+  <Var name="w" type="number" expression="#view_width"/>
+  <Var name="h" type="number" expression="#view_height"/>
+  <Var name="isP2" type="number" expression="ifelse((#w / #h) >= 1.6, 1, 0)"/>
+  <Var name="dpdx" type="number" expression="ifelse(#isP2, 2.97, 3.23)"/>
+  <Var name="barCircleR" type="number" expression="ifelse(#isP2,2.5 * #dpdx,2 * #dpdx)"/>
+  <Var name="barCircleGap" type="number" expression="ifelse(#isP2,4.5 * #dpdx,4.46 * #dpdx)"/>
+  <Var name="timeRectW" type="number" expression="ifelse(#isP2,51 * #dpdx,46 * #dpdx)"/>
+  <Var name="timeRectH" type="number" expression="ifelse(#isP2,21 * #dpdx,20 * #dpdx)"/>
+  <Var name="contentW2" type="number" expression="(#w * ifelse(#isP2,0.82,0.78))"/>
+  <Var name="sr" type="number" expression="ifelse((#view_width { 1200),(#view_width / 334),(950 / 334))"/>
+  <Var name="scaleX" type="number" expression="#sr"/>
+  <Var name="scaleY" type="number" expression="ifelse((#view_height { 500),(#view_height / 150),(440 / 150))"/>
+  <Var name="r" type="number" expression="(0.45 * #view_height)"/>
+  <Var name="isPlay" type="number" expression="eqs(#music_control.music_state,'1')"/>
+  <Var name="isPlayed" type="number" expression="0" const="true"/>
+  <Var name="isPlayIconAnimeByUpdate" type="number" expression="0" const="true"/>
+  <Var name="playIconAlpha" type="number" expression="ifelse(#isPlay,255,0)"/>
+  <Var name="pauseIconAlpha" type="number" expression="ifelse(#isPlay,0,255)"/>
+  <Var name="playState" type="number" expression="0" const="true"/>
+  <Var name="isLockBtnAniFrame" type="number" expression="0" const="true"/>
+  <Var name="pause_state" type="number" expression="0" const="true"/>
+  <Permanence name="hideCircle" expression="0" type="number" const="true"/>
+  <Permanence name="circleBgColorPer" expression="0" type="number" const="true"/>
+  
+  <Permanence name="isAodState" expression="0" type="number" const="true"/>
+  <Var name="lyricNormalAlpha" type="number" expression="ifelse(#isAodState,0,255)"/>
+  <Var name="lyricAodAlpha" type="number" expression="ifelse(#isAodState,255,0)"/>
+
+  <Var name="prevPaletteColorStr" type="string" expression="''" const="true"/>
+  <Var name="prevPaletteColorStr1" type="string" expression="''" const="true"/>
+  <Var name="prevPaletteColorStr2" type="string" expression="''" const="true"/>
+  <Var name="prevPaletteColorStr3" type="string" expression="''" const="true"/>
+  <Var name="prevPaletteColorHex" type="number" expression="0" const="true"/>
+  <Var name="prevPaletteColorHex1" type="number" expression="0" const="true"/>
+  <Var name="prevPaletteColorHex2" type="number" expression="0" const="true"/>
+  <Var name="prevPaletteColorHex3" type="number" expression="0" const="true"/>
+  <Var name="platelet_raw" type="number" expression="#platelet"/>
+  <Var name="platelet" type="number" expression="max(#platelet_raw, 80)" const="true"/>
+  <Var name="paletteColorHex" type="string" expression="''" const="true"/>
+  <Var name="paletteColorHex1" type="string" expression="''" const="true"/>
+  <Var name="paletteColorHex2" type="string" expression="''" const="true"/>
+  <Var name="paletteColorHex3" type="string" expression="''" const="true"/>
+  <Var name="displayedTitle" type="string" expression="''" const="true"/>
+  <Var name="displayedArtist" type="string" expression="''" const="true"/>
+  <Var name="needUpdateTitle" type="string" expression="''" const="true"/>
+  <Var name="needUpdateArtist" type="string" expression="''" const="true"/>
+  <Var name="prevTitle" type="string" expression="''" const="true"/>
+  <Var name="titleEval" type="string" expression="@music_control.title"/>
+  <Var name="isPrevTitleUpdate" type="number" expression="eqs(@titleEval,@prevTitle)"/>
+  <Var name="paletteColorHexStr" type="string" expression="strReplaceAll(@paletteColorHex,'#','0x')"/>
+  <Var name="paletteColorHexNum" type="number" expression="eval(@paletteColorHexStr)"/>
+  <Var name="paletteColorHexStr1" type="string" expression="strReplaceAll(@paletteColorHex1,'#','0x')"/>
+  <Var name="paletteColorHexNum1" type="number" expression="eval(@paletteColorHexStr1)"/>
+  <Var name="paletteColorHexStr2" type="string" expression="strReplaceAll(@paletteColorHex2,'#','0x')"/>
+  <Var name="paletteColorHexNum2" type="number" expression="eval(@paletteColorHexStr2)"/>
+  <Var name="paletteColorHexStr3" type="string" expression="strReplaceAll(@paletteColorHex3,'#','0x')"/>
+  <Var name="paletteColorHexNum3" type="number" expression="eval(@paletteColorHexStr3)"/>
+  <Var name="designWidth" type="number" expression="336"/>
+  <Var name="scale" type="number" expression="(#view_width / #designWidth)"/>
+  <Var name="q200Width" type="number" expression="904"/>
+  <Var name="q200Height" type="number" expression="572"/>
+  <Var name="q200AvailableWidth" type="number" expression="625"/>
+  <Var name="q200MarginLeftRatio" type="number" expression="((#q200Width - #q200AvailableWidth) / #q200Width)"/>
+  <Var name="q200ScreenRatio" type="number" expression="(#q200Width / #q200Height)"/>
+  <Var name="p2Width" type="number" expression="976"/>
+  <Var name="p2Height" type="number" expression="596"/>
+  <Var name="p2AvailableWidth" type="number" expression="696"/>
+  <Var name="p2MarginLeftRatio" type="number" expression="((#p2Width - #p2AvailableWidth) / #p2Width)"/>
+  <Var name="p2ScreenRatio" type="number" expression="(#p2Width / #p2Height)"/>
+  <Var name="realScreenRatio" type="number" expression="(#view_width / #view_height)"/>
+  <Var name="diffWithQ200" type="number" expression="abs((#realScreenRatio - #q200ScreenRatio))"/>
+  <Var name="diffWithP2" type="number" expression="abs((#realScreenRatio - #p2ScreenRatio))"/>
+  <Var name="isQ200" type="number" expression="(#diffWithQ200 { #diffWithP2)"/>
+  <Var name="availableMarginLeftRatio" type="number" expression="ifelse(#isQ200,#q200MarginLeftRatio,#p2MarginLeftRatio)"/>
+  <Var name="safeAreaMarginLeft" type="number" expression="(8 * #scale)"/>
+  <Var name="viewMarginLeft" type="number" expression="(((#view_width * #availableMarginLeftRatio) + #safeAreaMarginLeft) - (10 * #scale))"/>
+  <Var name="music_part_w" type="number" expression="(193 * #scaleX)"/>
+  <Var name="music_part_h" type="number" expression="(122 * #scaleY)"/>
+  <Var name="music_part_x" type="number" expression="(20 * #scaleX)"/>
+  <Var name="music_part_y" type="number" expression="(22 * #scaleY)"/>
+  <Var name="albumSize" type="number" expression="(66 * #sr)"/>
+  <Var name="albumRadius" type="number" expression="(12.4 * #sr)"/>
+  <Var name="albumMarginX" type="number" expression="(10 * #sr)"/>
+  <Var name="albumInfoMarginY" type="number" expression="(82 * #scaleY)"/>
+  <Var name="albumInfoW" type="number" expression="(173 * #scaleX)"/>
+  <Var name="albumNameH" type="number" expression="(29 * #scaleY)"/>
+  <Var name="albumArtistLineHeight" type="number" expression="(16 * #sr)"/>
+  <Var name="albumArtistMaxLines" type="number" expression="3"/>
+  <Var name="albumArtH" type="number" expression="(#albumArtistLineHeight * #albumArtistMaxLines)"/>
+  <Var name="albumTitleColor" type="string" expression="'#ffffff'"/>
+  <Var name="albumArtistColor" type="string" expression="'#ffffff'"/>
+  <Var name="albumArtistAlpha" type="number" expression="(255 * 0.5)"/>
+  <Var name="albumAlpha" type="number" expression="255"/>
+  <Var name="albumInfoAlpha" type="number" expression="255"/>
+  <Var name="albumNameX" type="number" expression="0"/>
+  <Var name="albumNameY" type="number" expression="0"/>
+  <Var name="albumArtX" type="number" expression="0"/>
+  
+  <Var name="rawTitleW" type="number" expression="#measure_title.text_width"/>
+  <Var name="titleScaleRatio" type="number" expression="ifelse((#rawTitleW } (2 * #albumInfoW)), max(0.65, (2 * #albumInfoW) / #rawTitleW), 1)"/>
+  <Var name="dynamicTitleSize" type="number" expression="#platelet * #titleScaleRatio"/>
+  <Var name="scaledTitleW" type="number" expression="#rawTitleW * #titleScaleRatio"/>
+  <Var name="albumNameActualW" type="number" expression="#scaledTitleW"/>
+  <Var name="albumArtistActualW" type="number" expression="max(#album_artist_text.text_width, #album_artist_text_aod.text_width)"/>
+  
+  <Var name="artworkX" type="number" expression="0"/>
+  <Var name="artworkY" type="number" expression="ifelse((#scaledTitleW } (2 * #albumInfoW)), -18 * #scaleY, ifelse((#scaledTitleW } #albumInfoW), -10 * #scaleY, 0))"/>
+
+  <Var name="music_btn_x" type="number" expression="(20 * #scaleX)"/>
+  <Var name="music_btn_y" type="number" expression="ifelse(#isQ200,(162 * #scaleY + 10),(158 * #scaleY +9))"/>
+  <Var name="music_btn_w" type="number" expression="(193 * #scaleX)"/>
+  <Var name="buttonSize" type="number" expression="(48 * #sr)"/>
+  <Var name="playButtonSize" type="number" expression="(48 * #sr)"/>
+  <Var name="buttonMidX" type="number" expression="ifelse(#isQ200,(72.5 * #sr),(76.5 * #sr))"/>
+  <Var name="buttonRightX" type="number" expression="ifelse(#isQ200,(147 * #sr),(156 * #sr))"/>
+  <Var name="buttonLeftX" type="number" expression="0"/>
+  <Var name="buttonY" type="number" expression="(0 * #sr)"/>
+  <Permanence name="musicBtnAlpha" expression="255" type="number" const="true"/>
+  
+  <Var name="ablumNameOverflowX" type="number" expression="#album_name_text_aod.text_left"/>
+  <Var name="ablumArtistOverflowX" type="number" expression="#album_artist_text_aod.text_left"/>
+  <Var name="isOnAodAni" type="number" expression="0" const="true"/>
+  <Var name="music_part_y_aod" type="number" expression="(53 * #scaleY)"/>
+  <Var name="albumSizeAod" type="number" expression="(58 * #sr)"/>
+  <Var name="albumRadiusAod" type="number" expression="(10.9 * #sr)"/>
+  <Var name="albumInfoMarginYAod" type="number" expression="(72 * #scaleY)"/>
+  <Var name="albumAlphaAod" type="number" expression="(255 * 0.4)"/>
+  
+  <Var name="albumMarginXAod" type="number" expression="ifelse(#isQ200,(20.5 * #sr),(26.5 * #sr))"/>
+  <Var name="albumInfoAlphaAod" type="number" expression="0"/>
+  <Var name="musicBtnAlphaAod" type="number" expression="0"/>
+  <Var name="albumNameAodY" type="number" expression="(((#music_part_y_aod + #albumInfoMarginYAod) - #albumInfoMarginY) - #music_part_y)"/>
+  
+  <Var name="artworkAodX" type="number" expression="(#albumMarginXAod - #albumMarginX)"/>
+  <Var name="artworkAodY" type="number" expression="(#music_part_y_aod - #music_part_y) + #artworkY"/>
+  
+  <Var name="aodSideInfoX" type="number" expression="(#viewMarginLeft + #music_part_x + #albumMarginX + #artworkAodX + #albumSizeAod + (15 * #sr))"/>
+  <Var name="aodSideInfoW" type="number" expression="(#view_width - #aodSideInfoX - (25 * #sr))"/>
+  <Var name="aodArtistMaxLines" type="number" expression="3"/>
+  <Var name="aodArtistH" type="number" expression="((17 * #sr) * #aodArtistMaxLines * 1.05)"/>
+  <Var name="aodArtistDisplayH" type="number" expression="min(#aod_side_info_measure.text_height, #aodArtistH)"/>
+  <Var name="aodArtistTopY" type="number" expression="(#music_part_y + #artworkAodY + (#albumSizeAod / 2) - (#aodArtistDisplayH / 2))"/>
+  
+  <Var name="rawArtistW" type="number" expression="#measure_artist.text_width"/>
+  <Var name="dynamicArtistSize" type="number" expression="max(13 * #sr, min(17 * #sr, (17 * #sr * (#aodSideInfoW * 1.6) / #rawArtistW)))"/>
+
+  <Var name="isConnect" type="number" expression="eqs(#music_control.connect,'1')"/>
+  <Var name="colorState" type="number" expression="0"/>
+  <Var name="is_play_circle_anime" type="number" expression="0" const="true"/>
+  <Var name="rand_circle_x1" type="number" expression="ifelse((! #enable_hyper_material),((0.5 * #view_width) - (0.75 * #view_height)),(0.3 * #view_width))" const="true"/>
+  <Var name="rand_circle_y1" type="number" expression="ifelse((! #enable_hyper_material),(3 * #view_height),(3 * #view_height))" const="true"/>
+  <Var name="rand_circle_x2" type="number" expression="ifelse((! #enable_hyper_material),((0.7 * #view_width) - (0.75 * #view_height)),(0.55 * #view_width))" const="true"/>
+  <Var name="rand_circle_y2" type="number" expression="ifelse((! #enable_hyper_material),(3 * #view_height),(3 * #view_height))" const="true"/>
+  <Var name="rand_circle_x3" type="number" expression="ifelse((! #enable_hyper_material),((0.9 * #view_width) - (0.75 * #view_height)),(0.8 * #view_width))" const="true"/>
+  <Var name="rand_circle_y3" type="number" expression="ifelse((! #enable_hyper_material),(3 * #view_height),(3 * #view_height))" const="true"/>
+  <Var name="bg_cicle_alpha1" type="number" expression="(255 * 0.7)"/>
+  <Var name="bg_cicle_alpha2" type="number" expression="(255 * 0.5)"/>
+  <Var name="bg_cicle_alpha3" type="number" expression="(255 * 0.5)"/>
+  
+  <Var name="artworkPosWatch" expression="#artworkY" threshold="1">
+    <Trigger>
+      <IfCommand ifCondition="#isAodState">
+        <Consequent>
+          <FolmeCommand target="music_artwork" config="'folme_config_pos'" states="'folme_state_aod_pos'" command="to"/>
+          <FolmeCommand target="music_artwork_default" config="'folme_config_pos'" states="'folme_state_aod_pos'" command="to"/>
+        </Consequent>
+        <Alternate>
+          <FolmeCommand target="music_artwork" config="'folme_config_pos'" states="'folme_state_normal_pos'" command="to"/>
+          <FolmeCommand target="music_artwork_default" config="'folme_config_pos'" states="'folme_state_normal_pos'" command="to"/>
+        </Alternate>
+      </IfCommand>
+    </Trigger>
+  </Var>
+
+  <Var name="musicNameUpdateWatch" expression="#isPrevTitleUpdate" threshold="1">
+    <Trigger>
+      <FrameRateCommand rate="120"/>
+      <ExternalCommand command="resume"/>
+      
+      <IfCommand ifCondition="(! eq(len(@titleEval), len(@prevTitle)))">
+        <Consequent>
+          <FunctionCommand target="lyric_anim_play"/>
+        </Consequent>
+      </IfCommand>
+      
+      <VariableCommand name="prevTitle" expression="@titleEval" type="string"/>
+      
+      <VariableCommand name="displayedTitle" expression="@music_control.title" type="string"/>
+      <VariableCommand name="displayedArtist" expression="@music_control.artist" type="string"/>
+      <VariableCommand name="needUpdateTitle" expression="''" type="string"/>
+      <VariableCommand name="needUpdateArtist" expression="''" type="string"/>
+
+      <FunctionCommand target="checkNameIsUpdate" delay="1200" delayCondition="1"/>
+      
+      <VariableCommand name="prevPaletteColorStr" expression="@paletteColorHex" type="string"/>
+      <VariableCommand name="prevPaletteColorStr1" expression="@paletteColorHex1" type="string"/>
+      <VariableCommand name="prevPaletteColorStr2" expression="@paletteColorHex2" type="string"/>
+      <VariableCommand name="prevPaletteColorStr3" expression="@paletteColorHex3" type="string"/>
+      <VariableCommand name="prevPaletteColorHex" expression="#paletteColorHexNum" type="number"/>
+      <VariableCommand name="prevPaletteColorHex1" expression="#paletteColorHexNum1" type="number"/>
+      <VariableCommand name="prevPaletteColorHex2" expression="#paletteColorHexNum2" type="number"/>
+      <VariableCommand name="prevPaletteColorHex3" expression="#paletteColorHexNum3" type="number"/>
+      <FunctionCommand target="getColorTimer" delay="500" delayCondition="1"/>
+      <FunctionCommand target="getColorTimer" delay="1500" delayCondition="1"/>
+    </Trigger>
+  </Var>
+  <Var name="musicStateWatch" expression="#music_control.music_state" threshold="1">
+    <Trigger>
+      <FunctionCommand target="checkNameIsUpdate" delay="1000" delayCondition="1"/>
+      <VariableCommand name="playState" expression="#music_control.music_state" type="number"/>
+      <MultiCommand condition="(#isAodState == 0)">
+        <FunctionCommand target="bg_circle_anime"/>
+      </MultiCommand>
+    </Trigger>
+  </Var>
+  <Var name="hyperMaterialWatch" expression="#enable_hyper_material" threshold="1">
+    <Trigger>
+      <PermanenceCommand name="hideCircle" expression="1" requestUpdate="true" type="number"/>
+      <MultiCommand condition="(! eq(#paletteColorHexNum,0))">
+        <PermanenceCommand name="circleBgColorPer" expression="#paletteColorHexNum" requestUpdate="true" type="number"/>
+      </MultiCommand>
+    </Trigger>
+  </Var>
+  
+  <Function name="bg_circle_anime">
+    <VariableCommand name="is_play_circle_anime" expression="1" type="number"/>
+    <IfCommand ifCondition="(! #enable_hyper_material)">
+      <Consequent>
+        <VariableCommand name="rand_circle_x1" expression="((((rand() * 0.4) + 0.1) * #view_width) - (0.75 * #view_height))" type="number"/>
+        <VariableCommand name="rand_circle_y1" expression="(((rand() * 0.4) + 0) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x2" expression="((((rand() * 0.4) + 0.3) * #view_width) - (0.75 * #view_height))" type="number"/>
+        <VariableCommand name="rand_circle_y2" expression="(((rand() * 0.4) + 0) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x3" expression="((((rand() * 0.4) + 0.5) * #view_width) - (0.75 * #view_height))" type="number"/>
+        <VariableCommand name="rand_circle_y3" expression="(((rand() * 0.4) + 0) * #view_height)" type="number"/>
+      </Consequent>
+      <Alternate>
+        <VariableCommand name="rand_circle_x1" expression="((rand() * 0.5) * #view_width)" type="number"/>
+        <VariableCommand name="rand_circle_y1" expression="(((rand() * 0.4) + 0.8) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x2" expression="(((rand() * 0.5) + 0.25) * #view_width)" type="number"/>
+        <VariableCommand name="rand_circle_y2" expression="(((rand() * 0.4) + 0.8) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x3" expression="(((rand() * 0.5) + 0.5) * #view_width)" type="number"/>
+        <VariableCommand name="rand_circle_y3" expression="(((rand() * 0.4) + 0.8) * #view_height)" type="number"/>
+      </Alternate>
+    </IfCommand>
+    <FolmeCommand target="circle1" config="'folme_config_0'" states="'folme_state_0'" command="to"/>
+    <FolmeCommand target="circle2" config="'folme_config_1'" states="'folme_state_1'" command="to"/>
+    <FolmeCommand target="circle3" config="'folme_config_2'" states="'folme_state_2'" command="to"/>
+  </Function>
+  <Function name="bg_circle_anime1">
+    <VariableCommand name="is_play_circle_anime" expression="1" type="number"/>
+    <IfCommand ifCondition="(! #enable_hyper_material)">
+      <Consequent>
+        <VariableCommand name="rand_circle_x1" expression="((((rand() * 0.4) + 0.1) * #view_width) - (0.75 * #view_height))" type="number"/>
+        <VariableCommand name="rand_circle_y1" expression="(((rand() * 0.4) + 0) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x2" expression="((((rand() * 0.4) + 0.3) * #view_width) - (0.75 * #view_height))" type="number"/>
+        <VariableCommand name="rand_circle_y2" expression="(((rand() * 0.4) + 0) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x3" expression="((((rand() * 0.4) + 0.5) * #view_width) - (0.75 * #view_height))" type="number"/>
+        <VariableCommand name="rand_circle_y3" expression="(((rand() * 0.4) + 0) * #view_height)" type="number"/>
+      </Consequent>
+      <Alternate>
+        <VariableCommand name="rand_circle_x1" expression="((rand() * 0.5) * #view_width)" type="number"/>
+        <VariableCommand name="rand_circle_y1" expression="(((rand() * 0.4) + 0.8) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x2" expression="(((rand() * 0.5) + 0.25) * #view_width)" type="number"/>
+        <VariableCommand name="rand_circle_y2" expression="(((rand() * 0.4) + 0.8) * #view_height)" type="number"/>
+        <VariableCommand name="rand_circle_x3" expression="(((rand() * 0.5) + 0.5) * #view_width)" type="number"/>
+        <VariableCommand name="rand_circle_y3" expression="(((rand() * 0.4) + 0.8) * #view_height)" type="number"/>
+      </Alternate>
+    </IfCommand>
+    <FolmeCommand target="circle1" config="'folme_config_3'" states="'folme_state_3'" command="to"/>
+    <FolmeCommand target="circle2" config="'folme_config_4'" states="'folme_state_4'" command="to"/>
+    <FolmeCommand target="circle3" config="'folme_config_5'" states="'folme_state_5'" command="to"/>
+  </Function>
+  
+  <Function name="onEnterAodAni">
+    <FrameRateCommand rate="120"/>
+    <FunctionCommand target="bg_circle_anime"/>
+    <VariableCommand name="is_play_circle_anime" expression="0" type="number"/>
+    <FolmeCommand target="btn_part" config="'folme_config_6'" states="'folme_state_6'" command="to"/>
+    <MultiCommand condition="!#music_artwork.bmp_width">
+      <FolmeCommand target="music_artwork_default" config="'folme_config_7'" states="'folme_state_7'" command="to"/>
+    </MultiCommand>
+    <FolmeCommand target="music_artwork" config="'folme_config_8'" states="'folme_state_8'" command="to"/>
+    <FolmeCommand target="album_name" config="'folme_config_9'" states="'folme_state_9'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_10'" states="'folme_state_10'" command="to"/>
+    <FolmeCommand target="album_name_aod" config="'folme_config_11'" states="'folme_state_11'" command="to"/>
+    <FolmeCommand target="album_artist_aod" config="'folme_config_12'" states="'folme_state_12'" command="to"/>
+    <FolmeCommand target="aod_side_info" config="'folme_config_11'" states="'folme_state_11'" command="to"/>
+    <FolmeCommand target="album_name" config="'folme_config_13'" states="'folme_state_13'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_14'" states="'folme_state_14'" command="to"/>
+  </Function>
+  
+  <Function name="onEnterAodAniImd">
+    <FrameRateCommand rate="120"/>
+    <FunctionCommand target="bg_circle_anime"/>
+    <VariableCommand name="is_play_circle_anime" expression="0" type="number"/>
+    <FolmeCommand target="album_name_aod" config="'folme_config_15'" states="'folme_state_15'" command="to"/>
+    <FolmeCommand target="album_artist_aod" config="'folme_config_16'" states="'folme_state_16'" command="to"/>
+    <FolmeCommand target="aod_side_info" config="'folme_config_15'" states="'folme_state_15'" command="to"/>
+    <MultiCommand condition="!#music_artwork.bmp_width">
+      <FolmeCommand target="music_artwork_default" config="'folme_config_17'" states="'folme_state_17'" command="to"/>
+    </MultiCommand>
+    <FolmeCommand target="music_artwork" config="'folme_config_18'" states="'folme_state_18'" command="to"/>
+    <FolmeCommand target="album_name" config="'folme_config_19'" states="'folme_state_19'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_20'" states="'folme_state_20'" command="to"/>
+    <FolmeCommand target="album_name" config="'folme_config_21'" states="'folme_state_21'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_22'" states="'folme_state_22'" command="to"/>
+  </Function>
+  
+  <Function name="onExitAodAni">
+    <FrameRateCommand rate="120"/>
+    <PermanenceCommand name="isAodState" expression="0" requestUpdate="true" type="number"/>
+    <MultiCommand condition="(#isPlayed == 1)">
+      <FunctionCommand target="bg_circle_anime"/>
+      <MultiCommand condition="(#playState == 0)">
+        <VariableCommand name="is_play_circle_anime" expression="0" type="number"/>
+      </MultiCommand>
+    </MultiCommand>
+    <FolmeCommand target="album_name" config="'folme_config_23'" states="'folme_state_23'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_24'" states="'folme_state_24'" command="to"/>
+    <FolmeCommand target="album_name" config="'folme_config_25'" states="'folme_state_25'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_26'" states="'folme_state_26'" command="to"/>
+    <FolmeCommand target="album_name_aod" config="'folme_config_27'" states="'folme_state_27'" command="to"/>
+    <FolmeCommand target="album_artist_aod" config="'folme_config_28'" states="'folme_state_28'" command="to"/>
+    <FolmeCommand target="aod_side_info" config="'folme_config_27'" states="'folme_state_27'" command="to"/>
+  </Function>
+  
+  <Function name="exitAodAlbumAni">
+    <FolmeCommand target="btn_part" config="'folme_config_29'" states="'folme_state_29'" command="to"/>
+    <MultiCommand condition="!#music_artwork.bmp_width">
+      <FolmeCommand target="music_artwork_default" config="'folme_config_30'" states="'folme_state_30'" command="to"/>
+    </MultiCommand>
+    <FolmeCommand target="music_artwork" config="'folme_config_31'" states="'folme_state_31'" command="to"/>
+    <FolmeCommand target="album_name" config="'folme_config_32'" states="'folme_state_32'" command="to"/>
+    <FolmeCommand target="album_artist" config="'folme_config_33'" states="'folme_state_33'" command="to"/>
+  </Function>
+  <Function name="pauseAni">
+    <FrameRateCommand rate="120"/>
+    <VariableCommand name="playState" expression="0" type="number"/>
+    <VariableCommand name="is_play_circle_anime" expression="0" type="number"/>
+    <LottieCommand target="pause" command="play"/>
+  </Function>
+  <Function name="playAni">
+    <FrameRateCommand rate="120"/>
+    <VariableCommand name="playState" expression="1" type="number"/>
+    <VariableCommand name="isPlayed" expression="1" type="number"/>
+    <MultiCommand condition="(#is_play_circle_anime == 0)">
+      <FunctionCommand target="bg_circle_anime"/>
+    </MultiCommand>
+    <LottieCommand target="play" command="play"/>
+  </Function>
+  <Function name="syncMusicState">
+    <IfCommand ifCondition="!#music_control.music_state">
+      <Consequent>
+        <FunctionCommand target="pauseAni"/>
+      </Consequent>
+      <Alternate>
+        <FunctionCommand target="playAni"/>
+      </Alternate>
+    </IfCommand>
+    <VariableCommand name="prevTitle" expression="@titleEval" type="string"/>
+  </Function>
+  <Function name="syncMusicStateByUpdate">
+    <MultiCommand condition="(#playState == 0)">
+      <VariableCommand name="isLockBtnAniFrame" expression="1" type="number"/>
+      <MusicCommand target="music_control" command="play"/>
+      <FunctionCommand target="playAni"/>
+    </MultiCommand>
+  </Function>
+  <Function name="handleMusicStateChange">
+    <IfCommand ifCondition="!#music_control.music_state">
+      <Consequent>
+        <MusicCommand target="music_control" command="play"/>
+        <FunctionCommand target="playAni"/>
+      </Consequent>
+      <Alternate>
+        <MusicCommand target="music_control" command="pause"/>
+        <FunctionCommand target="pauseAni"/>
+      </Alternate>
+    </IfCommand>
+  </Function>
+  <Function name="handleMusicPrev">
+    <MultiCommand condition="(#playState == 0)">
+      <VariableCommand name="isPlayIconAnimeByUpdate" expression="1" type="number"/>
+    </MultiCommand>
+    <LottieCommand target="back" command="play"/>
+    <FunctionCommand target="syncMusicStateByUpdate"/>
+    <MusicCommand target="music_control" command="prev"/>
+    <VariableCommand name="prevTitle" expression="@music_control.title" type="string"/>
+  </Function>
+  <Function name="handleMusicNext">
+    <MultiCommand condition="(#playState == 0)">
+      <VariableCommand name="isPlayIconAnimeByUpdate" expression="1" type="number"/>
+    </MultiCommand>
+    <LottieCommand target="forward" command="play"/>
+    <FunctionCommand target="syncMusicStateByUpdate"/>
+    <MusicCommand target="music_control" command="next"/>
+    <VariableCommand name="prevTitle" expression="@music_control.title" type="string"/>
+  </Function>
+  <Function name="onPlayCompleted">
+    <VariableCommand name="isPlayIconAnimeByUpdate" expression="0" type="number"/>
+    <VariableCommand name="isLockBtnAniFrame" expression="0" type="number"/>
+    <FrameRateCommand rate="60"/>
+  </Function>
+  <Function name="onPauseCompleted">
+    <VariableCommand name="isLockBtnAniFrame" expression="0" type="number"/>
+    <FrameRateCommand rate="60"/>
+  </Function>
+  <Function name="onUpdateMusicCompeleted">
+    <MultiCommand condition="(#isLockBtnAniFrame == 0)">
+      <FrameRateCommand rate="60"/>
+    </MultiCommand>
+  </Function>
+  <Function name="getColorTimer">
+    <BinderCommand name="getBgColor" command="refresh"/>
+    <BinderCommand name="getColor1" command="refresh"/>
+    <BinderCommand name="getColor2" command="refresh"/>
+    <BinderCommand name="getColor3" command="refresh"/>
+  </Function>
+
+  <Function name="lyric_anim_play">
+    <FolmeCommand target="album_name" config="'folme_config_lyric'" states="'folme_state_lyric_start', 'folme_state_lyric_end'" command="fromTo"/>
+    <FolmeCommand target="album_name_aod" config="'folme_config_lyric'" states="'folme_state_lyric_aod_start', 'folme_state_lyric_aod_end'" command="fromTo"/>
+  </Function>
+
+  <Function name="checkNameIsUpdate">
+    <VariableCommand name="prevTitle" expression="@music_control.title" type="string"/>
+    <MultiCommand condition="(! eqs(@displayedTitle,@music_control.title))">
+      <VariableCommand name="displayedTitle" expression="@music_control.title" type="string"/>
+      <VariableCommand name="displayedArtist" expression="@music_control.artist" type="string"/>
+    </MultiCommand>
+  </Function>
+  <Function name="showCircle">
+    <PermanenceCommand name="hideCircle" expression="0" requestUpdate="true" type="number"/>
+  </Function>
+  <Function name="getColorTimerInit">
+    <VariableCommand name="prevPaletteColorStr" expression="@paletteColorHex" type="string"/>
+    <VariableCommand name="prevPaletteColorStr1" expression="@paletteColorHex1" type="string"/>
+    <VariableCommand name="prevPaletteColorStr2" expression="@paletteColorHex2" type="string"/>
+    <VariableCommand name="prevPaletteColorStr3" expression="@paletteColorHex3" type="string"/>
+    <VariableCommand name="prevPaletteColorHex" expression="#paletteColorHexNum" type="number"/>
+    <VariableCommand name="prevPaletteColorHex1" expression="#paletteColorHexNum1" type="number"/>
+    <VariableCommand name="prevPaletteColorHex2" expression="#paletteColorHexNum2" type="number"/>
+    <VariableCommand name="prevPaletteColorHex3" expression="#paletteColorHexNum3" type="number"/>
+    <BinderCommand name="getBgColor" command="refresh"/>
+    <BinderCommand name="getColor1" command="refresh"/>
+    <BinderCommand name="getColor2" command="refresh"/>
+    <BinderCommand name="getColor3" command="refresh"/>
+  </Function>
+  <Function name="getCircleMaskColorTimer">
+    <VariableCommand name="prevPaletteColorStr1" expression="@paletteColorHex1" type="string"/>
+    <VariableCommand name="prevPaletteColorStr2" expression="@paletteColorHex2" type="string"/>
+    <VariableCommand name="prevPaletteColorStr3" expression="@paletteColorHex3" type="string"/>
+    <VariableCommand name="prevPaletteColorHex1" expression="#paletteColorHexNum1" type="number"/>
+    <VariableCommand name="prevPaletteColorHex2" expression="#paletteColorHexNum2" type="number"/>
+    <VariableCommand name="prevPaletteColorHex3" expression="#paletteColorHexNum3" type="number"/>
+    <BinderCommand name="getBgColor" command="refresh"/>
+    <PermanenceCommand name="hideCircle" expression="0" requestUpdate="true" type="number"/>
+  </Function>
+  <Function name="getCircleColorTimer">
+    <BinderCommand name="getColor1" command="refresh"/>
+    <BinderCommand name="getColor2" command="refresh"/>
+    <BinderCommand name="getColor3" command="refresh"/>
+  </Function>
+  
+  <Rectangle x="(#view_width / 2)" y="(#view_height / 2)" w="#view_width" h="#view_height" fillColor="#circleBgColorPer" visibility="((! #enable_hyper_material) ** eq(#prevPaletteColorHex,0))" name="circle_bg_down" align="center" alignV="center"/>
+  <Rectangle x="(#view_width / 2)" y="(#view_height / 2)" w="#view_width" h="#view_height" fillColor="#prevPaletteColorHex" visibility="(! #enable_hyper_material)" folmeMode="true" name="circle_bg_normal" align="center" alignV="center"/>
+  <Group visibility="((! #enable_hyper_material) ** eq(#hideCircle,0))" name="circle_img">
+    <Group x="#rand_circle_x1" y="#rand_circle_y1" alpha="#bg_cicle_alpha1" visibility="(! eqs(@prevPaletteColorStr1,''))" folmeMode="true" name="circle1">
+      <Image w="(1.5 * #view_height)" h="(1.5 * #view_height)" tint="@prevPaletteColorStr1" folmeMode="true" name="circle1_i" src="assets/circle.png" tintmode="5"/>
+    </Group>
+    <Group x="#rand_circle_x2" y="#rand_circle_y2" alpha="#bg_cicle_alpha2" visibility="(! eqs(@prevPaletteColorStr2,''))" folmeMode="true" name="circle2">
+      <Image w="(1.5 * #view_height)" h="(1.5 * #view_height)" tint="@prevPaletteColorStr2" folmeMode="true" name="circle2_i" src="assets/circle.png" tintmode="5"/>
+    </Group>
+    <Group x="#rand_circle_x3" y="#rand_circle_y3" alpha="#bg_cicle_alpha3" visibility="(! eqs(@prevPaletteColorStr3,''))" folmeMode="true" name="circle3">
+      <Image w="(1.5 * #view_height)" h="(1.5 * #view_height)" tint="@prevPaletteColorStr3" folmeMode="true" name="circle3_i" src="assets/circle.png" tintmode="5"/>
+    </Group>
+  </Group>
+  
+  <Group x="#viewMarginLeft">
+    <MusicControl w="(#view_width - #viewMarginLeft)" h="#view_height" name="music_control" autoShow="false" autoRefresh="true" x="0" y="0">
+      <Group x="#music_part_x" y="#music_part_y" w="#music_part_w" h="#music_part_h" alpha="#albumAlpha" name="album_part">
+        <Group w="#albumSize" h="#albumSize" x="#albumMarginX" contentDescriptionExp="strReplaceAll(@music_cover,'音乐名称',@music_control.title)" name="album_mask">
+          <Image w="#albumSize" h="#albumSize" x="#artworkX" y="#artworkY" cornerRadiusExp="#albumRadius" visibility="!#music_artwork.bmp_width" folmeMode="true" name="music_artwork_default" src="assets/icon_default.png"/>
+          <Image w="#albumSize" h="#albumSize" x="#artworkX" y="#artworkY" cornerRadiusExp="#albumRadius" folmeMode="true" name="music_artwork" src="music_control.artwork" srcType="BitmapVar"/>
+        </Group>
+        <Group x="#albumMarginX" y="#albumInfoMarginY" w="#albumInfoW" h="#albumInfoH" name="album_info">
+          
+          <Text x="-9999" y="-9999" textExp="@music_control.title" size="#platelet" name="measure_title" fontFamily="mipro-demibold" alpha="0"/>
+          
+          <Text x="-9999" y="-9999" textExp="@music_control.artist" size="(17 * #sr)" name="measure_artist" fontFamily="mipro-medium" alpha="0"/>
+
+          <Group x="#albumNameX" y="#albumNameY" w="#albumInfoW" h="#albumNameH" alpha="#albumInfoAlpha" contentDescriptionExp="@music_control.title" folmeMode="true" name="album_name">
+            <Text w="#albumInfoW" y="(#albumNameH / 2) + 45" textExp="@music_control.title" size="#dynamicTitleSize" color="@albumTitleColor" name="album_name_text" enableClip="'false'" textAlign="'left'" alignV="center" ellipsis="false" fontFamily="mipro-demibold"/>
+          </Group>
+          <Group y="#albumNameAodY" w="#albumInfoW" alpha="#albumInfoAlphaAod" contentDescriptionExp="@music_control.title" folmeMode="true" name="album_name_aod">
+            <Text w="#albumInfoW" y="(#albumNameH / 2) + 45" textExp="@music_control.title" size="#dynamicTitleSize" color="@albumTitleColor" name="album_name_text_aod" textAlign="'center'" alignV="center" ellipsis="false" fontFamily="mipro-demibold"/>
+          </Group>
+          <Group x="#albumArtX" y="#albumNameH" w="#albumInfoW" h="#albumArtH" alpha="#albumInfoAlpha" contentDescriptionExp="@music_control.artist" folmeMode="true" name="album_artist">
+            <Text w="#albumInfoW" h="#albumArtH" y="(#albumArtH / 2)" textExp=" " size="(15 * #sr)" color="@albumArtistColor" alpha="#albumArtistAlpha" name="album_artist_text" textAlign="'left'" enableClip="'false'" alignV="center" ellipsis="false" multiLine="true" maxLines="#albumArtistMaxLines" fontFamily="mipro-demibold"/>
+          </Group>
+          <Group w="#albumInfoW" y="(#albumNameH + #albumNameAodY)" alpha="#albumInfoAlphaAod" contentDescriptionExp="@music_control.artist" folmeMode="true" name="album_artist_aod">
+            <Text w="#albumInfoW" h="#albumArtH" y="(#albumArtH / 2)" textExp=" " size="(15 * #sr)" color="@albumArtistColor" alpha="#albumArtistAlpha" name="album_artist_text_aod" textAlign="'center'" alignV="center" ellipsis="false" multiLine="true" maxLines="#albumArtistMaxLines" fontFamily="mipro-demibold"/>
+          </Group>
+        </Group>
+      </Group>
+      <Group alpha="#musicBtnAlpha" x="#music_btn_x" y="#music_btn_y" w="#music_btn_w" h="#buttonSize" folmeMode="true" name="btn_part">
+        <Rectangle x="#buttonLeftX" y="#buttonY" w="#buttonSize" h="#buttonSize" touchable="true" contentDescriptionExp="@button_prev" name="button_back" interceptTouch="true">
+          <Triggers>
+            <Trigger action="up">
+              <FunctionCommand target="handleMusicPrev"/>
+            </Trigger>
+          </Triggers>
+        </Rectangle>
+        <Group x="#buttonLeftX" y="#buttonY" w="#buttonSize" h="#buttonSize" name="icon_back">
+          <Lottie x="(#buttonSize / 2)" w="#buttonSize" h="#buttonSize" touchable="true" name="back" src="assets/back.json" align="center" autoplay="true" loop="0">
+            <Triggers>
+              <Trigger action="complete">
+                <FunctionCommand target="onUpdateMusicCompeleted"/>
+              </Trigger>
+            </Triggers>
+          </Lottie>
+        </Group>
+        <Rectangle x="#buttonMidX" w="#playButtonSize" h="#playButtonSize" touchable="true" contentDescriptionExp="ifelse((#playState == 0),@button_play,@button_pause)" name="button_play_pause" interceptTouch="true">
+          <Triggers>
+            <Trigger action="up">
+              <FunctionCommand target="handleMusicStateChange"/>
+            </Trigger>
+          </Triggers>
+        </Rectangle>
+        <Group x="#buttonMidX" w="#playButtonSize" h="#playButtonSize" name="icon_pause_play">
+          <Group w="#playButtonSize" h="#playButtonSize" visibility="#pauseIconAlpha" name="icon_pause">
+            <Lottie x="(#playButtonSize / 2)" w="#playButtonSize" h="#playButtonSize" touchable="true" name="pause" src="assets/pause.json" align="center" autoplay="true" loop="0">
+              <Triggers>
+                <Trigger action="complete">
+                  <FunctionCommand target="onPauseCompleted"/>
+                </Trigger>
+              </Triggers>
+            </Lottie>
+          </Group>
+          <Group w="#playButtonSize" h="#playButtonSize" visibility="#playIconAlpha" name="icon_play">
+            <Lottie x="(#playButtonSize / 2)" w="#playButtonSize" h="#playButtonSize" touchable="true" name="play" src="assets/play.json" align="center" autoplay="true" loop="0">
+              <Triggers>
+                <Trigger action="complete">
+                  <FunctionCommand target="onPlayCompleted"/>
+                </Trigger>
+              </Triggers>
+            </Lottie>
+          </Group>
+        </Group>
+        <Rectangle x="#buttonRightX" y="#buttonY" w="#buttonSize" h="#buttonSize" touchable="true" contentDescriptionExp="@button_next" name="button_next" interceptTouch="true">
+          <Triggers>
+            <Trigger action="up">
+              <FunctionCommand target="handleMusicNext"/>
+            </Trigger>
+          </Triggers>
+        </Rectangle>
+        <Group x="#buttonRightX" y="#buttonY" w="#buttonSize" h="#buttonSize" name="icon_next">
+          <Lottie x="(#buttonSize / 2)" w="#buttonSize" h="#buttonSize" touchable="true" name="forward" src="assets/forward.json" align="center" autoplay="true" loop="0">
+            <Triggers>
+              <Trigger action="complete">
+                <FunctionCommand target="onUpdateMusicCompeleted"/>
+              </Trigger>
+            </Triggers>
+          </Lottie>
+        </Group>
+      </Group>
+    </MusicControl>
+  </Group>
+  
+  <Layer alpha="(255 * 0.7)" visibility="#enable_hyper_material" name="layer" blurColors="'#00000000'" blurRadius="220" colorModes="28" updatePosition="false" updateSize="false" updateTranslation="false" layerType="bottom">
+    <Rectangle h="#view_height" w="#view_width" fillColor="#FFFFFF" x="0" y="0"/>
+  </Layer>
+  <Layer visibility="#enable_hyper_material" layerType="bottom" frameRate="-1">
+    <Rectangle visibility="eq(#prevPaletteColorHex,0)" fillColor="#circleBgColorPer" h="#view_height" w="#view_width" folmeMode="true" name="circle_bg" x="0" y="0"/>
+    <Rectangle fillColor="#prevPaletteColorHex" h="#view_height" w="#view_width" folmeMode="true" name="circle_bg" x="0" y="0"/>
+    <Group x="#rand_circle_x1" y="#rand_circle_y1" alpha="#bg_cicle_alpha1" visibility="eq(#hideCircle,0)" folmeMode="true" name="circle1">
+      <Circle r="#r" fillColor="#prevPaletteColorHex1" folmeMode="true" name="circle1_c"/>
+    </Group>
+    <Group x="#rand_circle_x2" y="#rand_circle_y2" alpha="#bg_cicle_alpha2" visibility="eq(#hideCircle,0)" folmeMode="true" name="circle2">
+      <Circle r="#r" fillColor="#prevPaletteColorHex2" folmeMode="true" name="circle2_c"/>
+    </Group>
+    <Group x="#rand_circle_x3" y="#rand_circle_y3" alpha="#bg_cicle_alpha3" visibility="eq(#hideCircle,0)" folmeMode="true" name="circle3">
+      <Circle r="#r" fillColor="#prevPaletteColorHex2" folmeMode="true" name="circle3_c"/>
+    </Group>
+  </Layer>
+
+  <Group folmeMode="true" name="aod_side_info" alpha="0" h="#aodArtistH">
+    <Text x="-9999"
+          y="-9999"
+          w="#aodSideInfoW"
+          textExp="@music_control.artist"
+          size="#dynamicArtistSize"
+          name="aod_side_info_measure"
+          alpha="0"
+          align="left"
+          multiLine="true"
+          maxLines="#aodArtistMaxLines"
+          fontFamily="mipro-medium" />
+    <Text x="#aodSideInfoX" 
+          y="#aodArtistTopY" 
+          w="#aodSideInfoW"
+          h="#aodArtistH"
+          textExp="@music_control.artist" 
+          size="#dynamicArtistSize" 
+          color="#ffffff" 
+          alpha="(255 * 0.65)"
+          name="aod_side_info_text"
+          align="left" 
+          alignV="top" 
+          multiLine="true"
+          maxLines="#aodArtistMaxLines"
+          fontFamily="mipro-medium" />
+  </Group>
+  <Group visibility="#__debug">
+    <Text x="#viewMarginLeft" textExp="!#music_control.music_state" size="50" color="#ffffff"/>
+    <Text x="#viewMarginLeft" textExp="#music_control.music_state" size="50" y="50" color="#ffffff"/>
+    <Text x="#viewMarginLeft" textExp="#isPlay" size="50" y="100" color="#ffffff"/>
+  </Group>
+  
+  <Group>
+    <FolmeState name="folme_state_0" x="#rand_circle_x1" y="#rand_circle_y1" alpha="#bg_cicle_alpha1"/>
+    <FolmeConfig name="folme_config_0" ease="1, 1000" onComplete="'folme_oncomplete_1'" />
+    <Function name="folme_oncomplete_1">
+      <IfCommand ifCondition="((#playState == 1) ** (#isAodState == 0))">
+        <Consequent>
+          <MultiCommand condition="(! #pause_state)">
+            <FunctionCommand target="bg_circle_anime1"/>
+          </MultiCommand>
+        </Consequent>
+        <Alternate>
+          <FrameRateCommand rate="60"/>
+        </Alternate>
+      </IfCommand>
+    </Function>
+    <FolmeState name="folme_state_1" x="#rand_circle_x2" y="#rand_circle_y2" alpha="#bg_cicle_alpha2"/>
+    <FolmeConfig name="folme_config_1" ease="1, 1000" onComplete="'folme_oncomplete_2'"/>
+    <Function name="folme_oncomplete_2"/>
+    <FolmeState name="folme_state_2" x="#rand_circle_x3" y="#rand_circle_y3" alpha="#bg_cicle_alpha3"/>
+    <FolmeConfig name="folme_config_2" ease="1, 1000" onComplete="'folme_oncomplete_3'"/>
+    <Function name="folme_oncomplete_3"/>
+    <FolmeState name="folme_state_3" x="#rand_circle_x1" y="#rand_circle_y1" alpha="#bg_cicle_alpha1"/>
+    <FolmeConfig name="folme_config_3" ease="1, 1000" onComplete="'folme_oncomplete_4'"/>
+    <Function name="folme_oncomplete_4">
+      <IfCommand ifCondition="((#playState == 1) ** (#isAodState == 0))">
+        <Consequent>
+          <MultiCommand condition="(! #pause_state)">
+            <FunctionCommand target="bg_circle_anime"/>
+          </MultiCommand>
+        </Consequent>
+        <Alternate>
+          <FrameRateCommand rate="60"/>
+        </Alternate>
+      </IfCommand>
+    </Function>
+    <FolmeState name="folme_state_4" x="#rand_circle_x2" y="#rand_circle_y2" alpha="#bg_cicle_alpha2"/>
+    <FolmeConfig name="folme_config_4" ease="1, 1000" onComplete="'folme_oncomplete_5'"/>
+    <Function name="folme_oncomplete_5"/>
+    <FolmeState name="folme_state_5" x="#rand_circle_x3" y="#rand_circle_y3" alpha="#bg_cicle_alpha3"/>
+    <FolmeConfig name="folme_config_5" ease="1, 1000" onComplete="'folme_oncomplete_6'"/>
+    <Function name="folme_oncomplete_6"/>
+    <FolmeState name="folme_state_6" alpha="#musicBtnAlphaAod"/>
+    <FolmeConfig name="folme_config_6" ease="-2, 1, 0.72" onComplete="'folme_oncomplete_7'"/>
+    <Function name="folme_oncomplete_7">
+      <PermanenceCommand name="isAodState" expression="1" requestUpdate="true" type="number"/>
+    </Function>
+    <FolmeState name="folme_state_7" x="#artworkAodX" y="#artworkAodY" w="#albumSizeAod" h="#albumSizeAod" cornerRadius="#albumRadiusAod"/>
+    <FolmeConfig name="folme_config_7" ease="-2, 1, 0.72" onComplete="'folme_oncomplete_8'"/>
+    <Function name="folme_oncomplete_8"/>
+    <FolmeState name="folme_state_8" x="#artworkAodX" y="#artworkAodY" w="#albumSizeAod" h="#albumSizeAod" cornerRadius="#albumRadiusAod"/>
+    <FolmeConfig name="folme_config_8" ease="-2, 1, 0.72" onComplete="'folme_oncomplete_9'"/>
+    <Function name="folme_oncomplete_9"/>
+    <FolmeState name="folme_state_9" x="ifelse((#albumNameActualW } #albumInfoW),#ablumNameOverflowX,((#albumInfoW - #albumNameActualW) / 2))" y="#albumNameAodY" w="#albumInfoW" h="#albumNameH"/>
+    <FolmeConfig name="folme_config_9" ease="-2, 1, 0.72" onComplete="'folme_oncomplete_10'"/>
+    <Function name="folme_oncomplete_10"/>
+    <FolmeState name="folme_state_10" x="ifelse((#albumArtistActualW } #albumInfoW),#ablumArtistOverflowX,((#albumInfoW - #albumArtistActualW) / 2))" y="(#albumNameH + #albumNameAodY)" w="#albumInfoW" h="#albumArtH"/>
+    <FolmeConfig name="folme_config_10" ease="-2, 1, 0.72" onComplete="'folme_oncomplete_11'"/>
+    <Function name="folme_oncomplete_11"/>
+    <FolmeState name="folme_state_11" alpha="255"/>
+    <FolmeConfig name="folme_config_11" delay="1720" ease="1, 0" onComplete="'folme_oncomplete_12'"/>
+    <Function name="folme_oncomplete_12"/>
+    <FolmeState name="folme_state_12" alpha="255"/>
+    <FolmeConfig name="folme_config_12" delay="1720" ease="1, 0" onComplete="'folme_oncomplete_13'"/>
+    <Function name="folme_oncomplete_13"/>
+    <FolmeState name="folme_state_13" alpha="0"/>
+    <FolmeConfig name="folme_config_13" delay="1730" ease="1, 0" onComplete="'folme_oncomplete_14'"/>
+    <Function name="folme_oncomplete_14"/>
+    <FolmeState name="folme_state_14" alpha="0"/>
+    <FolmeConfig name="folme_config_14" delay="1730" ease="1, 0" onComplete="'folme_oncomplete_15'"/>
+    <Function name="folme_oncomplete_15">
+      <VariableCommand name="isOnAodAni" expression="0" type="number"/>
+      <MultiCommand condition="(! eqs(@needUpdateTitle,''))">
+        <VariableCommand name="displayedTitle" expression="@needUpdateTitle" type="string"/>
+        <VariableCommand name="displayedArtist" expression="@needUpdateArtist" type="string"/>
+        <VariableCommand name="needUpdateTitle" expression="''" type="string"/>
+        <VariableCommand name="needUpdateArtist" expression="''" type="string"/>
+      </MultiCommand>
+    </Function>
+    <FolmeState name="folme_state_15" alpha="255"/>
+    <FolmeConfig name="folme_config_15" ease="1, 0" onComplete="'folme_oncomplete_16'"/>
+    <Function name="folme_oncomplete_16"/>
+    <FolmeState name="folme_state_16" alpha="255"/>
+    <FolmeConfig name="folme_config_16" ease="1, 0" onComplete="'folme_oncomplete_17'"/>
+    <Function name="folme_oncomplete_17"/>
+    <FolmeState name="folme_state_17" x="#artworkAodX" y="#artworkAodY" w="#albumSizeAod" h="#albumSizeAod" cornerRadius="#albumRadiusAod"/>
+    <FolmeConfig name="folme_config_17" ease="1, 0" onComplete="'folme_oncomplete_18'"/>
+    <Function name="folme_oncomplete_18"/>
+    <FolmeState name="folme_state_18" x="#artworkAodX" y="#artworkAodY" w="#albumSizeAod" h="#albumSizeAod" cornerRadius="#albumRadiusAod"/>
+    <FolmeConfig name="folme_config_18" ease="1, 0" onComplete="'folme_oncomplete_19'"/>
+    <Function name="folme_oncomplete_19"/>
+    <FolmeState name="folme_state_19" x="ifelse((#albumNameActualW } #albumInfoW),#ablumNameOverflowX,((#albumInfoW - #albumNameActualW) / 2))" y="#albumNameAodY" w="#albumInfoW" h="#albumNameH"/>
+    <FolmeConfig name="folme_config_19" ease="1, 0" onComplete="'folme_oncomplete_20'"/>
+    <Function name="folme_oncomplete_20"/>
+    <FolmeState name="folme_state_20" x="ifelse((#albumArtistActualW } #albumInfoW),#ablumArtistOverflowX,((#albumInfoW - #albumArtistActualW) / 2))" y="(#albumNameH + #albumNameAodY)" w="#albumInfoW" h="#albumArtH"/>
+    <FolmeConfig name="folme_config_20" ease="1, 0" onComplete="'folme_oncomplete_21'"/>
+    <Function name="folme_oncomplete_21"/>
+    <FolmeState name="folme_state_21" alpha="0"/>
+    <FolmeConfig name="folme_config_21" delay="10" ease="1, 0" onComplete="'folme_oncomplete_22'"/>
+    <Function name="folme_oncomplete_22"/>
+    <FolmeState name="folme_state_22" alpha="0"/>
+    <FolmeConfig name="folme_config_22" delay="10" ease="1, 0" onComplete="'folme_oncomplete_23'"/>
+    <Function name="folme_oncomplete_23"/>
+    <FolmeState name="folme_state_23" x="ifelse((#albumNameActualW } #albumInfoW),#ablumNameOverflowX,((#albumInfoW - #albumNameActualW) / 2))" y="#albumNameAodY"/>
+    <FolmeConfig name="folme_config_23" ease="-2, 1, 0.01" onComplete="'folme_oncomplete_24'"/>
+    <Function name="folme_oncomplete_24"/>
+    <FolmeState name="folme_state_24" x="ifelse((#albumArtistActualW } #albumInfoW),#ablumArtistOverflowX,((#albumInfoW - #albumArtistActualW) / 2))" y="(#albumNameH + #albumNameAodY)"/>
+    <FolmeConfig name="folme_config_24" ease="-2, 1, 0.01" onComplete="'folme_oncomplete_25'"/>
+    <Function name="folme_oncomplete_25"/>
+    <FolmeState name="folme_state_25" alpha="255"/>
+    <FolmeConfig name="folme_config_25" delay="10" ease="-2, 1, 0.01" onComplete="'folme_oncomplete_26'"/>
+    <Function name="folme_oncomplete_26"/>
+    <FolmeState name="folme_state_26" alpha="255"/>
+    <FolmeConfig name="folme_config_26" delay="10" ease="-2, 1, 0.01" onComplete="'folme_oncomplete_27'"/>
+    <Function name="folme_oncomplete_27"/>
+    <FolmeState name="folme_state_27" alpha="0"/>
+    <FolmeConfig name="folme_config_27" delay="10" ease="-2, 1, 0.01" onComplete="'folme_oncomplete_28'"/>
+    <Function name="folme_oncomplete_28"/>
+    <FolmeState name="folme_state_28" alpha="0"/>
+    <FolmeConfig name="folme_config_28" delay="10" ease="-2, 1, 0.01" onComplete="'folme_oncomplete_29'"/>
+    <Function name="folme_oncomplete_29">
+      <FunctionCommand target="exitAodAlbumAni"/>
+    </Function>
+    <FolmeState name="folme_state_29" alpha="255"/>
+    <FolmeConfig name="folme_config_29" ease="-2, 1, 0.5" onComplete="'folme_oncomplete_30'"/>
+    <Function name="folme_oncomplete_30"/>
+    <FolmeState name="folme_state_30" x="#artworkX" y="#artworkY" w="#albumSize" h="#albumSize" cornerRadius="#albumRadius"/>
+    <FolmeConfig name="folme_config_30" ease="-2, 1, 0.5" onComplete="'folme_oncomplete_31'"/>
+    <Function name="folme_oncomplete_31"/>
+    <FolmeState name="folme_state_31" x="#artworkX" y="#artworkY" w="#albumSize" h="#albumSize" cornerRadius="#albumRadius"/>
+    <FolmeConfig name="folme_config_31" ease="-2, 1, 0.5" onComplete="'folme_oncomplete_32'"/>
+    <Function name="folme_oncomplete_32"/>
+    <FolmeState name="folme_state_32" x="0" y="#albumNameY" w="#albumInfoW" h="#albumNameH"/>
+    <FolmeConfig name="folme_config_32" ease="-2, 1, 0.5" onComplete="'folme_oncomplete_33'"/>
+    <Function name="folme_oncomplete_33"/>
+    <FolmeState name="folme_state_33" x="0" y="#albumNameH" w="#albumInfoW" h="#albumArtH"/>
+    <FolmeConfig name="folme_config_33" ease="-2, 1, 0.5" onComplete="'folme_oncomplete_34'"/>
+    <Function name="folme_oncomplete_34">
+      <FrameRateCommand rate="60"/>
+    </Function>
+    <FolmeState name="folme_state_34" fillColor="#circle_bg.fillColor"/>
+    <FolmeConfig name="folme_config_34" ease="1, 450" onComplete="'folme_oncomplete_35'"/>
+    <FolmeState name="folme_state_34_end" fillColor="#paletteColorHexNum"/>
+    <Function name="folme_oncomplete_35"/>
+    <FolmeState name="folme_state_35" fillColor="#circle_bg_normal.fillColor"/>
+    <FolmeConfig name="folme_config_35" ease="1, 450" onComplete="'folme_oncomplete_36'"/>
+    <FolmeState name="folme_state_35_end" fillColor="#paletteColorHexNum"/>
+    <Function name="folme_oncomplete_36"/>
+    <FolmeState name="folme_state_36" fillColor="ifelse((#prevPaletteColorHex1 == 0),0,#circle1_c.fillColor)"/>
+    <FolmeConfig name="folme_config_36" ease="1, 450" onComplete="'folme_oncomplete_37'"/>
+    <FolmeState name="folme_state_36_end" fillColor="#paletteColorHexNum1"/>
+    <Function name="folme_oncomplete_37"/>
+    <FolmeState name="folme_state_37" tintColor="ifelse((#prevPaletteColorHex1 == 0),0,#circle1_i.tintColor)"/>
+    <FolmeConfig name="folme_config_37" ease="1, 450" onComplete="'folme_oncomplete_38'"/>
+    <FolmeState name="folme_state_37_end" tintColor="#paletteColorHexNum1"/>
+    <Function name="folme_oncomplete_38"/>
+    <FolmeState name="folme_state_38" fillColor="ifelse((#prevPaletteColorHex2 == 0),0,#circle2_c.fillColor)"/>
+    <FolmeConfig name="folme_config_38" ease="1, 450" onComplete="'folme_oncomplete_39'"/>
+    <FolmeState name="folme_state_38_end" fillColor="#paletteColorHexNum2"/>
+    <Function name="folme_oncomplete_39">
+      <MultiCommand condition="eqs(@prevPaletteColorStr2,@paletteColorHex2)">
+        <FunctionCommand target="getColorTimer" delay="300" delayCondition="1"/>
+      </MultiCommand>
+    </Function>
+    <FolmeState name="folme_state_39" tintColor="ifelse((#prevPaletteColorHex2 == 0),0,#circle2_i.tintColor)"/>
+    <FolmeConfig name="folme_config_39" ease="1, 450" onComplete="'folme_oncomplete_40'"/>
+    <FolmeState name="folme_state_39_end" tintColor="#paletteColorHexNum2"/>
+    <Function name="folme_oncomplete_40">
+      <MultiCommand condition="eqs(@prevPaletteColorStr2,@paletteColorHex2)">
+        <FunctionCommand target="getColorTimer" delay="300" delayCondition="1"/>
+      </MultiCommand>
+    </Function>
+    <FolmeState name="folme_state_40" fillColor="ifelse((#prevPaletteColorHex3 == 0),0,#circle3_c.fillColor)"/>
+    <FolmeConfig name="folme_config_40" ease="1, 450" onComplete="'folme_oncomplete_41'"/>
+    <FolmeState name="folme_state_40_end" fillColor="#paletteColorHexNum3"/>
+    <Function name="folme_oncomplete_41"/>
+    <FolmeState name="folme_state_41" tintColor="ifelse((#prevPaletteColorHex3 == 0),0,#circle3_i.tintColor)"/>
+    <FolmeConfig name="folme_config_41" ease="1, 450" onComplete="'folme_oncomplete_42'"/>
+    <FolmeState name="folme_state_41_end" tintColor="#paletteColorHexNum3"/>
+    <Function name="folme_oncomplete_42"/>
+    <FolmeState name="folme_state_42" alpha="255"/>
+    <FolmeConfig name="folme_config_42" ease="1, 0" onComplete="'folme_oncomplete_43'"/>
+    <Function name="folme_oncomplete_43"/>
+    <FolmeState name="folme_state_43" alpha="0"/>
+    <FolmeConfig name="folme_config_43" ease="1, 0" onComplete="'folme_oncomplete_44'"/>
+    <Function name="folme_oncomplete_44"/>
+    <FolmeState name="folme_state_44" fillColor="#circleBgColorPer"/>
+    <FolmeConfig name="folme_config_44" ease="1, 0" onComplete="'folme_oncomplete_45'"/>
+    <Function name="folme_oncomplete_45"/>
+    <FolmeState name="folme_state_45" fillColor="#circleBgColorPer"/>
+    <FolmeConfig name="folme_config_45" ease="1, 0" onComplete="'folme_oncomplete_46'"/>
+    <Function name="folme_oncomplete_46"/>
+    
+    <FolmeState name="folme_state_normal_pos" y="#artworkY"/>
+    <FolmeState name="folme_state_aod_pos" y="#artworkAodY"/>
+    <FolmeConfig name="folme_config_pos" ease="-2, 1, 0.5"/>
+
+    <FolmeState name="folme_state_lyric_start" y="(#albumNameY+25*#scaleY)" alpha="#lyricNormalAlpha"/>
+    <FolmeState name="folme_state_lyric_end" y="#albumNameY" alpha="#lyricNormalAlpha"/>
+
+    <FolmeState name="folme_state_lyric_aod_start" y="(#albumNameAodY+25*#scaleY)" alpha="#lyricAodAlpha"/>
+    <FolmeState name="folme_state_lyric_aod_end" y="#albumNameAodY" alpha="#lyricAodAlpha"/>
+
+    <FolmeConfig name="folme_config_lyric" ease="-2, 1, 0.6"/>
+
+  </Group>
+  
+  <VariableBinders>
+    <MiPaletteBinder name="getBgColor" actionType="get_palette_color_string" queryAtStart="0" imageName="'music_artwork'" scheme="'primary'" toneIndex="1" columns="paletteColorHex">
+      <Variable name="paletteColorHex" column="paletteColorHex" type="string"/>
+      <Trigger>
+        <IfCommand ifCondition="#enable_hyper_material">
+          <Consequent>
+            <FolmeCommand target="circle_bg" config="'folme_config_34'" states="'folme_state_34', 'folme_state_34_end'" command="fromTo"/>
+          </Consequent>
+          <Alternate>
+            <FolmeCommand target="circle_bg_normal" config="'folme_config_35'" states="'folme_state_35', 'folme_state_35_end'" command="fromTo"/>
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </MiPaletteBinder>
+    <MiPaletteBinder name="getColor1" actionType="get_palette_color_string" queryAtStart="0" imageName="'music_artwork'" scheme="'primary'" toneIndex="7" columns="paletteColorHex">
+      <Variable name="paletteColorHex1" column="paletteColorHex" type="string"/>
+      <Trigger>
+        <IfCommand ifCondition="#enable_hyper_material">
+          <Consequent>
+            <FolmeCommand target="circle1_c" config="'folme_config_36'" states="'folme_state_36', 'folme_state_36_end'" command="fromTo"/>
+          </Consequent>
+          <Alternate>
+            <FolmeCommand target="circle1_i" config="'folme_config_37'" states="'folme_state_37', 'folme_state_37_end'" command="fromTo"/>
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </MiPaletteBinder>
+    <MiPaletteBinder name="getColor2" actionType="get_palette_color_string" queryAtStart="0" imageName="'music_artwork'" scheme="'primary'" toneIndex="11" columns="paletteColorHex">
+      <Variable name="paletteColorHex2" column="paletteColorHex" type="string"/>
+      <Trigger>
+        <IfCommand ifCondition="#enable_hyper_material">
+          <Consequent>
+            <FolmeCommand target="circle2_c" config="'folme_config_38'" states="'folme_state_38', 'folme_state_38_end'" command="fromTo"/>
+          </Consequent>
+          <Alternate>
+            <FolmeCommand target="circle2_i" config="'folme_config_39'" states="'folme_state_39', 'folme_state_39_end'" command="fromTo"/>
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </MiPaletteBinder>
+    <MiPaletteBinder name="getColor3" actionType="get_palette_color_string" queryAtStart="0" imageName="'music_artwork'" scheme="'tertiary'" toneIndex="12" columns="paletteColorHex">
+      <Variable name="paletteColorHex3" column="paletteColorHex" type="string"/>
+      <Trigger>
+        <IfCommand ifCondition="#enable_hyper_material">
+          <Consequent>
+            <FolmeCommand target="circle3_c" config="'folme_config_40'" states="'folme_state_40', 'folme_state_40_end'" command="fromTo"/>
+          </Consequent>
+          <Alternate>
+            <FolmeCommand target="circle3_i" config="'folme_config_41'" states="'folme_state_41', 'folme_state_41_end'" command="fromTo"/>
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </MiPaletteBinder>
+  </VariableBinders>
+  <ExternalCommands>
+    <Trigger action="init">
+      <IfCommand ifCondition="(#isAodState == 0)">
+        <Consequent>
+          <PermanenceCommand name="musicBtnAlpha" expression="255" requestUpdate="true" type="number"/>
+          <FolmeCommand target="btn_part" config="'folme_config_42'" states="'folme_state_42'" command="to"/>
+          <FolmeCommand target="aod_side_info" config="'folme_config_43'" states="'folme_state_43'" command="to"/>
+        </Consequent>
+        <Alternate>
+          <PermanenceCommand name="musicBtnAlpha" expression="0" requestUpdate="true" type="number"/>
+          <FolmeCommand target="btn_part" config="'folme_config_43'" states="'folme_state_43'" command="to"/>
+          <FolmeCommand target="aod_side_info" config="'folme_config_42'" states="'folme_state_42'" command="to"/>
+        </Alternate>
+      </IfCommand>
+      <IfCommand ifCondition="(! eq(#circleBgColorPer,0))">
+        <Consequent>
+          <IfCommand ifCondition="#enable_hyper_material">
+            <Consequent>
+              <FolmeCommand target="circle_bg" config="'folme_config_44'" states="'folme_state_44'" command="to"/>
+            </Consequent>
+            <Alternate>
+              <FolmeCommand target="circle_bg_normal" config="'folme_config_45'" states="'folme_state_45'" command="to"/>
+            </Alternate>
+          </IfCommand>
+          <FunctionCommand target="getCircleColorTimer" delay="1000" delayCondition="1"/>
+          <FunctionCommand target="getCircleMaskColorTimer" delay="2000" delayCondition="1"/>
+        </Consequent>
+        <Alternate>
+          <FunctionCommand target="getColorTimerInit" delay="1000" delayCondition="1"/>
+        </Alternate>
+      </IfCommand>
+      <FunctionCommand target="syncMusicState"/>
+    </Trigger>
+    <Trigger action="resume">
+      <IfCommand ifCondition="(#isAodState == 0)">
+        <Consequent>
+          <FrameRateCommand rate="120"/>
+        </Consequent>
+        <Alternate>
+          <FrameRateCommand rate="0"/>
+        </Alternate>
+      </IfCommand>
+      <MultiCommand condition="#pause_state">
+        <VariableCommand name="pause_state" expression="0" type="number"/>
+        <FunctionCommand target="bg_circle_anime"/>
+      </MultiCommand>
+    </Trigger>
+    <Trigger action="pause">
+      <VariableCommand name="pause_state" expression="1" type="number"/>
+      <FrameRateCommand rate="0"/>
+    </Trigger>
+    <Trigger action="launcherPause"/>
+    <Trigger action="launcherResume"/>
+    <Trigger action="enterAod">
+      <VariableCommand name="isOnAodAni" expression="0" type="number"/>
+      <IfCommand ifCondition="(#isAodState == 0)">
+        <Consequent>
+          <FunctionCommand target="onEnterAodAni"/>
+        </Consequent>
+        <Alternate>
+          <FunctionCommand target="onEnterAodAniImd"/>
+        </Alternate>
+      </IfCommand>
+    </Trigger>
+    <Trigger action="exitAod">
+      <FrameRateCommand rate="120"/>
+      <FunctionCommand target="onExitAodAni"/>
+    </Trigger>
+  </ExternalCommands>
+</Widget>
