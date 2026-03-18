@@ -26,3 +26,7 @@
    <img alt="Star History Chart" src="https://api.star-history.com/image?repos=SiberiaApp/Xiaomi-RearScreen-Music&type=date&legend=top-left" />
  </picture>
 </a>
+
+## 赞赏我
+
+<img width="1171" height="1171" alt="imagename" src="https://github.com/user-attachments/assets/eaa26296-4303-4f6f-a565-6e56800e9970" />
