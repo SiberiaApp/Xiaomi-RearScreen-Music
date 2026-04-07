@@ -21,6 +21,11 @@
   <Var name="playState" type="number" expression="0" const="true"/>
   <Var name="isLockBtnAniFrame" type="number" expression="0" const="true"/>
   <Var name="pause_state" type="number" expression="0" const="true"/>
+  
+  <Var name="isPrevToastActive" type="number" expression="0" const="true"/>
+  <Var name="isNextToastActive" type="number" expression="0" const="true"/>
+  <Var name="toastMsg" type="string" expression="''" const="true"/>
+  
   <Permanence name="hideCircle" expression="0" type="number" const="true"/>
   <Permanence name="circleBgColorPer" expression="0" type="number" const="true"/>
   
@@ -47,7 +52,10 @@
   <Var name="needUpdateTitle" type="string" expression="''" const="true"/>
   <Var name="needUpdateArtist" type="string" expression="''" const="true"/>
   <Var name="prevTitle" type="string" expression="''" const="true"/>
-  <Var name="titleEval" type="string" expression="@music_control.title"/>
+  
+  <Var name="currentLyricVal" type="string" expression="ifelse(strIsEmpty(@music_control.lyric_current), '歌词加载中...', @music_control.lyric_current)"/>
+  <Var name="titleEval" type="string" expression="@currentLyricVal"/>
+  
   <Var name="isPrevTitleUpdate" type="number" expression="eqs(@titleEval,@prevTitle)"/>
   <Var name="paletteColorHexStr" type="string" expression="strReplaceAll(@paletteColorHex,'#','0x')"/>
   <Var name="paletteColorHexNum" type="number" expression="eval(@paletteColorHexStr)"/>
@@ -187,8 +195,8 @@
       
       <VariableCommand name="prevTitle" expression="@titleEval" type="string"/>
       
-      <VariableCommand name="displayedTitle" expression="@music_control.title" type="string"/>
-      <VariableCommand name="displayedArtist" expression="@music_control.artist" type="string"/>
+      <VariableCommand name="displayedTitle" expression="@currentLyricVal" type="string"/>
+      <VariableCommand name="displayedArtist" expression="@music_control.title" type="string"/>
       <VariableCommand name="needUpdateTitle" expression="''" type="string"/>
       <VariableCommand name="needUpdateArtist" expression="''" type="string"/>
 
@@ -224,6 +232,36 @@
     </Trigger>
   </Var>
   
+  <Function name="showToastAni">
+    <FolmeCommand target="custom_toast" config="'folme_toast_in'" states="'state_toast_in'" command="to"/>
+  </Function>
+  
+  <Function name="hideToastAni">
+    <FolmeCommand target="custom_toast" config="'folme_toast_out'" states="'state_toast_out'" command="to"/>
+  </Function>
+  
+  <Function name="hideToastAniImd">
+    <FolmeCommand target="custom_toast" config="'folme_toast_out_imd'" states="'state_toast_out'" command="to"/>
+  </Function>
+
+  <Function name="clearPrevToastState">
+    <IfCommand ifCondition="eq(#isPrevToastActive, 1)">
+      <Consequent>
+        <VariableCommand name="isPrevToastActive" expression="0" type="number"/>
+        <FunctionCommand target="hideToastAni"/>
+      </Consequent>
+    </IfCommand>
+  </Function>
+
+  <Function name="clearNextToastState">
+    <IfCommand ifCondition="eq(#isNextToastActive, 1)">
+      <Consequent>
+        <VariableCommand name="isNextToastActive" expression="0" type="number"/>
+        <FunctionCommand target="hideToastAni"/>
+      </Consequent>
+    </IfCommand>
+  </Function>
+
   <Function name="bg_circle_anime">
     <VariableCommand name="is_play_circle_anime" expression="1" type="number"/>
     <IfCommand ifCondition="(! #enable_hyper_material)">
@@ -359,7 +397,7 @@
         <FunctionCommand target="playAni"/>
       </Alternate>
     </IfCommand>
-    <VariableCommand name="prevTitle" expression="@titleEval" type="string"/>
+    <VariableCommand name="prevTitle" expression="@currentLyricVal" type="string"/>
   </Function>
   <Function name="syncMusicStateByUpdate">
     <MultiCommand condition="(#playState == 0)">
@@ -387,7 +425,7 @@
     <LottieCommand target="back" command="play"/>
     <FunctionCommand target="syncMusicStateByUpdate"/>
     <MusicCommand target="music_control" command="prev"/>
-    <VariableCommand name="prevTitle" expression="@music_control.title" type="string"/>
+    <VariableCommand name="prevTitle" expression="@currentLyricVal" type="string"/>
   </Function>
   <Function name="handleMusicNext">
     <MultiCommand condition="(#playState == 0)">
@@ -396,7 +434,7 @@
     <LottieCommand target="forward" command="play"/>
     <FunctionCommand target="syncMusicStateByUpdate"/>
     <MusicCommand target="music_control" command="next"/>
-    <VariableCommand name="prevTitle" expression="@music_control.title" type="string"/>
+    <VariableCommand name="prevTitle" expression="@currentLyricVal" type="string"/>
   </Function>
   <Function name="onPlayCompleted">
     <VariableCommand name="isPlayIconAnimeByUpdate" expression="0" type="number"/>
@@ -425,10 +463,10 @@
   </Function>
 
   <Function name="checkNameIsUpdate">
-    <VariableCommand name="prevTitle" expression="@music_control.title" type="string"/>
-    <MultiCommand condition="(! eqs(@displayedTitle,@music_control.title))">
-      <VariableCommand name="displayedTitle" expression="@music_control.title" type="string"/>
-      <VariableCommand name="displayedArtist" expression="@music_control.artist" type="string"/>
+    <VariableCommand name="prevTitle" expression="@currentLyricVal" type="string"/>
+    <MultiCommand condition="(! eqs(@displayedTitle,@currentLyricVal))">
+      <VariableCommand name="displayedTitle" expression="@currentLyricVal" type="string"/>
+      <VariableCommand name="displayedArtist" expression="@music_control.title" type="string"/>
     </MultiCommand>
   </Function>
   <Function name="showCircle">
@@ -479,7 +517,7 @@
   </Group>
   
   <Group x="#viewMarginLeft">
-    <MusicControl w="(#view_width - #viewMarginLeft)" h="#view_height" name="music_control" autoShow="false" autoRefresh="true" x="0" y="0">
+    <MusicControl w="(#view_width - #viewMarginLeft)" h="#view_height" name="music_control" autoShow="false" autoRefresh="true" x="0" y="0" enableLyric="true" updateLyricInterval="100">
       <Group x="#music_part_x" y="#music_part_y" w="#music_part_w" h="#music_part_h" alpha="#albumAlpha" name="album_part">
         <Group w="#albumSize" h="#albumSize" x="#albumMarginX" contentDescriptionExp="strReplaceAll(@music_cover,'音乐名称',@music_control.title)" name="album_mask">
           <Image w="#albumSize" h="#albumSize" x="#artworkX" y="#artworkY" cornerRadiusExp="#albumRadius" visibility="!#music_artwork.bmp_width" folmeMode="true" name="music_artwork_default" src="assets/icon_default.png"/>
@@ -487,32 +525,48 @@
         </Group>
         <Group x="#albumMarginX" y="#albumInfoMarginY" w="#albumInfoW" h="#albumInfoH" name="album_info">
           
-          <Text x="-9999" y="-9999" textExp="@music_control.title" size="#platelet" name="measure_title" fontFamily="mipro-demibold" alpha="0"/>
+          <Text x="-9999" y="-9999" textExp="@currentLyricVal" size="#platelet" name="measure_title" fontFamily="mipro-demibold" alpha="0"/>
           
-          <Text x="-9999" y="-9999" textExp="@music_control.artist" size="(17 * #sr)" name="measure_artist" fontFamily="mipro-medium" alpha="0"/>
+          <Text x="-9999" y="-9999" textExp="@music_control.title" size="(17 * #sr)" name="measure_artist" fontFamily="mipro-medium" alpha="0"/>
 
-          <Group x="#albumNameX" y="#albumNameY" w="#albumInfoW" h="#albumNameH" alpha="#albumInfoAlpha" contentDescriptionExp="@music_control.title" folmeMode="true" name="album_name">
-            <Text w="#albumInfoW" y="(#albumNameH / 2) + 45" textExp="@music_control.title" size="#dynamicTitleSize" color="@albumTitleColor" name="album_name_text" enableClip="'false'" textAlign="'left'" alignV="center" ellipsis="false" fontFamily="mipro-demibold"/>
+          <Group x="#albumNameX" y="#albumNameY" w="#albumInfoW" h="#albumNameH" alpha="#albumInfoAlpha" contentDescriptionExp="@currentLyricVal" folmeMode="true" name="album_name">
+            <Text w="#albumInfoW" y="(#albumNameH / 2) + 45" textExp="@currentLyricVal" size="#dynamicTitleSize" color="@albumTitleColor" name="album_name_text" enableClip="'false'" textAlign="'left'" alignV="center" ellipsis="false" fontFamily="mipro-demibold"/>
           </Group>
-          <Group y="#albumNameAodY" w="#albumInfoW" alpha="#albumInfoAlphaAod" contentDescriptionExp="@music_control.title" folmeMode="true" name="album_name_aod">
-            <Text w="#albumInfoW" y="(#albumNameH / 2) + 45" textExp="@music_control.title" size="#dynamicTitleSize" color="@albumTitleColor" name="album_name_text_aod" textAlign="'center'" alignV="center" ellipsis="false" fontFamily="mipro-demibold"/>
+          <Group y="#albumNameAodY" w="#albumInfoW" alpha="#albumInfoAlphaAod" contentDescriptionExp="@currentLyricVal" folmeMode="true" name="album_name_aod">
+            <Text w="#albumInfoW" y="(#albumNameH / 2) + 45" textExp="@currentLyricVal" size="#dynamicTitleSize" color="@albumTitleColor" name="album_name_text_aod" textAlign="'center'" alignV="center" ellipsis="false" fontFamily="mipro-demibold"/>
           </Group>
-          <Group x="#albumArtX" y="#albumNameH" w="#albumInfoW" h="#albumArtH" alpha="#albumInfoAlpha" contentDescriptionExp="@music_control.artist" folmeMode="true" name="album_artist">
+          
+          <Group x="#albumArtX" y="#albumNameH" w="#albumInfoW" h="#albumArtH" alpha="#albumInfoAlpha" contentDescriptionExp=" " folmeMode="true" name="album_artist">
             <Text w="#albumInfoW" h="#albumArtH" y="(#albumArtH / 2)" textExp=" " size="(15 * #sr)" color="@albumArtistColor" alpha="#albumArtistAlpha" name="album_artist_text" textAlign="'left'" enableClip="'false'" alignV="center" ellipsis="false" multiLine="true" maxLines="#albumArtistMaxLines" fontFamily="mipro-demibold"/>
           </Group>
-          <Group w="#albumInfoW" y="(#albumNameH + #albumNameAodY)" alpha="#albumInfoAlphaAod" contentDescriptionExp="@music_control.artist" folmeMode="true" name="album_artist_aod">
+          <Group w="#albumInfoW" y="(#albumNameH + #albumNameAodY)" alpha="#albumInfoAlphaAod" contentDescriptionExp=" " folmeMode="true" name="album_artist_aod">
             <Text w="#albumInfoW" h="#albumArtH" y="(#albumArtH / 2)" textExp=" " size="(15 * #sr)" color="@albumArtistColor" alpha="#albumArtistAlpha" name="album_artist_text_aod" textAlign="'center'" alignV="center" ellipsis="false" multiLine="true" maxLines="#albumArtistMaxLines" fontFamily="mipro-demibold"/>
           </Group>
         </Group>
       </Group>
+      
       <Group alpha="#musicBtnAlpha" x="#music_btn_x" y="#music_btn_y" w="#music_btn_w" h="#buttonSize" folmeMode="true" name="btn_part">
         <Rectangle x="#buttonLeftX" y="#buttonY" w="#buttonSize" h="#buttonSize" touchable="true" contentDescriptionExp="@button_prev" name="button_back" interceptTouch="true">
           <Triggers>
             <Trigger action="up">
-              <FunctionCommand target="handleMusicPrev"/>
+              <IfCommand ifCondition="eq(#isPrevToastActive, 1)">
+                <Consequent>
+                  <VariableCommand name="isPrevToastActive" expression="0" type="number"/>
+                  <FunctionCommand target="hideToastAniImd"/>
+                  <FunctionCommand target="handleMusicPrev"/>
+                </Consequent>
+                <Alternate>
+                  <VariableCommand name="toastMsg" expression="'请再次点击上一首'" type="string"/>
+                  <VariableCommand name="isPrevToastActive" expression="1" type="number"/>
+                  <VariableCommand name="isNextToastActive" expression="0" type="number"/>
+                  <FunctionCommand target="showToastAni"/>
+                  <FunctionCommand target="clearPrevToastState" delay="1000" delayCondition="1"/>
+                </Alternate>
+              </IfCommand>
             </Trigger>
           </Triggers>
         </Rectangle>
+        
         <Group x="#buttonLeftX" y="#buttonY" w="#buttonSize" h="#buttonSize" name="icon_back">
           <Lottie x="(#buttonSize / 2)" w="#buttonSize" h="#buttonSize" touchable="true" name="back" src="assets/back.json" align="center" autoplay="true" loop="0">
             <Triggers>
@@ -522,6 +576,7 @@
             </Triggers>
           </Lottie>
         </Group>
+        
         <Rectangle x="#buttonMidX" w="#playButtonSize" h="#playButtonSize" touchable="true" contentDescriptionExp="ifelse((#playState == 0),@button_play,@button_pause)" name="button_play_pause" interceptTouch="true">
           <Triggers>
             <Trigger action="up">
@@ -529,6 +584,7 @@
             </Trigger>
           </Triggers>
         </Rectangle>
+        
         <Group x="#buttonMidX" w="#playButtonSize" h="#playButtonSize" name="icon_pause_play">
           <Group w="#playButtonSize" h="#playButtonSize" visibility="#pauseIconAlpha" name="icon_pause">
             <Lottie x="(#playButtonSize / 2)" w="#playButtonSize" h="#playButtonSize" touchable="true" name="pause" src="assets/pause.json" align="center" autoplay="true" loop="0">
@@ -549,13 +605,28 @@
             </Lottie>
           </Group>
         </Group>
+        
         <Rectangle x="#buttonRightX" y="#buttonY" w="#buttonSize" h="#buttonSize" touchable="true" contentDescriptionExp="@button_next" name="button_next" interceptTouch="true">
           <Triggers>
             <Trigger action="up">
-              <FunctionCommand target="handleMusicNext"/>
+              <IfCommand ifCondition="eq(#isNextToastActive, 1)">
+                <Consequent>
+                  <VariableCommand name="isNextToastActive" expression="0" type="number"/>
+                  <FunctionCommand target="hideToastAniImd"/>
+                  <FunctionCommand target="handleMusicNext"/>
+                </Consequent>
+                <Alternate>
+                  <VariableCommand name="toastMsg" expression="'请再次点击下一首'" type="string"/>
+                  <VariableCommand name="isNextToastActive" expression="1" type="number"/>
+                  <VariableCommand name="isPrevToastActive" expression="0" type="number"/>
+                  <FunctionCommand target="showToastAni"/>
+                  <FunctionCommand target="clearNextToastState" delay="1000" delayCondition="1"/>
+                </Alternate>
+              </IfCommand>
             </Trigger>
           </Triggers>
         </Rectangle>
+        
         <Group x="#buttonRightX" y="#buttonY" w="#buttonSize" h="#buttonSize" name="icon_next">
           <Lottie x="(#buttonSize / 2)" w="#buttonSize" h="#buttonSize" touchable="true" name="forward" src="assets/forward.json" align="center" autoplay="true" loop="0">
             <Triggers>
@@ -590,7 +661,7 @@
     <Text x="-9999"
           y="-9999"
           w="#aodSideInfoW"
-          textExp="@music_control.artist"
+          textExp="@music_control.title"
           size="#dynamicArtistSize"
           name="aod_side_info_measure"
           alpha="0"
@@ -602,7 +673,7 @@
           y="#aodArtistTopY" 
           w="#aodSideInfoW"
           h="#aodArtistH"
-          textExp="@music_control.artist" 
+          textExp="@music_control.title" 
           size="#dynamicArtistSize" 
           color="#ffffff" 
           alpha="(255 * 0.65)"
@@ -613,13 +684,25 @@
           maxLines="#aodArtistMaxLines"
           fontFamily="mipro-medium" />
   </Group>
+  
   <Group visibility="#__debug">
     <Text x="#viewMarginLeft" textExp="!#music_control.music_state" size="50" color="#ffffff"/>
     <Text x="#viewMarginLeft" textExp="#music_control.music_state" size="50" y="50" color="#ffffff"/>
     <Text x="#viewMarginLeft" textExp="#isPlay" size="50" y="100" color="#ffffff"/>
   </Group>
   
+  <Group x="(#viewMarginLeft + #music_btn_x + (#music_btn_w / 2))" y="(#music_btn_y - 50 * #scaleY)" alpha="0" folmeMode="true" name="custom_toast" align="center" alignV="center">
+    <Rectangle w="(350 * #sr)" h="(60 * #sr)" cornerRadius="(30 * #sr)" fillColor="#B3000000" align="center" alignV="center"/>
+    <Text textExp="@toastMsg" size="(22 * #sr)" color="#FFFFFF" align="center" alignV="center" fontFamily="mipro-medium"/>
+  </Group>
+
   <Group>
+    <FolmeState name="state_toast_in" alpha="255"/>
+    <FolmeState name="state_toast_out" alpha="0"/>
+    <FolmeConfig name="folme_toast_in" ease="-2, 1, 0.5"/>
+    <FolmeConfig name="folme_toast_out" ease="-2, 1, 0.5"/>
+    <FolmeConfig name="folme_toast_out_imd" ease="1, 0"/>
+
     <FolmeState name="folme_state_0" x="#rand_circle_x1" y="#rand_circle_y1" alpha="#bg_cicle_alpha1"/>
     <FolmeConfig name="folme_config_0" ease="1, 1000" onComplete="'folme_oncomplete_1'" />
     <Function name="folme_oncomplete_1">
